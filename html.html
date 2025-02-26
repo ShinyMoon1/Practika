@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Учет проживающих в общежитии</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <header>
+            <h1>Система учета проживающих в общежитии</h1>
+        </header>
+
+        <main>
+            <!-- Секция регистрации нового жильца -->
+            <section>
+                <h2>Регистрация нового жильца</h2>
+                <form id="registerForm">
+                    <label for="name">ФИО:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="room">Номер комнаты:</label>
+                    <input type="text" id="room" name="room" required>
+
+                    <label for="endDate">Дата окончания проживания:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+
+                    <button type="submit">Зарегистрировать</button>
+                </form>
+            </section>
+
+            <!-- Секция списка проживающих -->
+            <section>
+                <h2>Список проживающих</h2>
+                <table id="residentsTable">
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Комната</th>
+                            <th>Дата окончания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Данные будут добавляться с помощью JavaScript -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Секция заявок на ремонт -->
+            <section>
+                <h2>Заявки на ремонт</h2>
+                <form id="repairForm">
+                    <label for="residentName">ФИО жильца:</label>
+                    <input type="text" id="residentName" name="residentName" required>
+
+                    <label for="issue">Описание проблемы:</label>
+                    <textarea id="issue" name="issue" required></textarea>
+
+                    <button type="submit">Отправить заявку</button>
+                </form>
+
+                <h3>Список заявок</h3>
+                <ul id="repairList">
+                    <!-- Заявки будут добавляться с помощью JavaScript -->
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 Учет проживающих в общежитии</p>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+    <script>
+        // Данные для хранения проживающих и заявок
+        let residents = [];
+        let repairs = [];
+
+        // Форма регистрации нового жильца
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const room = document.getElementById('room').value;
+            const endDate = document.getElementById('endDate').value;
+
+            // Добавление нового жильца
+            residents.push({
+                name,
+                room,
+                endDate
+            });
+            updateResidentsTable();
+
+            // Очистка формы
+            document.getElementById('registerForm').reset();
+        });
+
+        // Форма подачи заявки на ремонт
+        document.getElementById('repairForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const residentName = document.getElementById('residentName').value;
+            const issue = document.getElementById('issue').value;
+
+            // Добавление новой заявки
+            repairs.push({
+                residentName,
+                issue,
+                status: "В ожидании"
+            });
+            updateRepairsList();
+
+            // Очистка формы
+            document.getElementById('repairForm').reset();
+        });
+
+        // Обновление таблицы проживающих
+        function updateResidentsTable() {
+            const tbody = document.querySelector('#residentsTable tbody');
+            tbody.innerHTML = '';
+
+            residents.forEach(resident => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${resident.name}</td>
+            <td>${resident.room}</td>
+            <td>${resident.endDate}</td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Обновление списка заявок
+        function updateRepairsList() {
+            const repairList = document.getElementById('repairList');
+            repairList.innerHTML = '';
+
+            repairs.forEach(repair => {
+                const item = document.createElement('li');
+                item.innerHTML = `
+            <strong>${repair.residentName}</strong>: ${repair.issue} (Статус: ${repair.status})
+        `;
+                repairList.appendChild(item);
+            });
+        }
+    </script>
+
+    </html>
+</body>
+
+</html>
